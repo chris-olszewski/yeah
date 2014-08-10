@@ -56,7 +56,6 @@ class Asteroid < Thing
 
   def draw(d)
     d.stroke_color = COLOR
-    d.fill_color = AsteroidsGame::BG_COLOR
 
     draw_polygon(d, @position, @rotation, @side_count, radius)
   end
