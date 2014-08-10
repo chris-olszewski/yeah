@@ -3,7 +3,5 @@ class Thing
 
   def initialize(args = {})
     @position = args.fetch(:position, V[0, 0])
-
-    setup(args)
   end
 end

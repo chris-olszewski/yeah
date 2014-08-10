@@ -3,8 +3,9 @@ class Bullet < Thing
   MAX_AGE = 0.5
   SPEED = 600
 
-  def setup(args)
-    @position = args.fetch(:position)
+  def initialize(args)
+    super
+
     @direction = args.fetch(:direction)
 
     @size = V[8, 8]

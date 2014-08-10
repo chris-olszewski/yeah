@@ -3,7 +3,9 @@ class Ship < Thing
   SPEED = 5
   ROTATE_SPEED = 5
 
-  def setup(args)
+  def initialize(args)
+    super
+
     @size = V[32, 32]
     @velocity = V[0, 0]
     @direction = Math::PI * 1.5

@@ -2,8 +2,11 @@ class Asteroid < Thing
   COLOR = C['#ffffff']
   RADIUS_PER_SIDE = 8
 
-  def setup(args)
+  def initialize(args)
+    super
+
     @side_count = args.fetch(:side_count)
+
     @rotation = 0
     @rotation_speed = Math.rand - 0.5
     @velocity = V[Math.rand * 50 - 25, Math.rand * 50 - 25]
