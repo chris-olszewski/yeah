@@ -52,25 +52,6 @@ class Ship < Thing
     end
   end
 
-  def _wrap(game)
-    left_overlap =  -@position.x - @size.x
-    right_overlap =  @position.x - @size.x - game.display.width
-    top_overlap =   -@position.y - @size.y
-    bottom_overlap = @position.y - @size.y - game.display.height
-
-    if left_overlap > 0
-      @position.x = game.display.width + @size.x / 2 - left_overlap
-    elsif right_overlap > 0
-      @position.x = right_overlap - @size.x / 2
-    end
-
-    if top_overlap > 0
-      @position.y = game.display.height + @size.y / 2 - top_overlap
-    elsif bottom_overlap > 0
-      @position.y = bottom_overlap - @size.y / 2
-    end
-  end
-
   def collide(game)
     game.things.each do |thing|
       if thing.respond_to?(:colliding?) && thing.colliding?(@position)

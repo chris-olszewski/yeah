@@ -35,6 +35,7 @@ class AsteroidsGame < Game
 
     @shot = false unless keyboard.pressing?(:z)
 
+    display.fill_color = BG_COLOR
     display.clear
 
     @things.each do |t|
@@ -42,5 +43,18 @@ class AsteroidsGame < Game
       t.update(elapsed, self)
       t.draw(display)
     end
+
+    draw_help(display)
+  end
+
+  private
+
+  def draw_help(d)
+    d.font_size = 16
+    d.fill_color = C['#999999']
+
+    d.fill_text(V[800, 100], "Left/Right - Turn")
+    d.fill_text(V[800, 120], "Up - Thrust")
+    d.fill_text(V[800, 140], "z - Shoot")
   end
 end

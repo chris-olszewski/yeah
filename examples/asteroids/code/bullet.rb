@@ -24,21 +24,18 @@ class Bullet < Thing
   end
 
   def wrap(game)
-    left_overlap =  -@position.x - @size.x
-    right_overlap =  @position.x - @size.x - game.display.width
-    top_overlap =   -@position.y - @size.y
-    bottom_overlap = @position.y - @size.y - game.display.height
+    half_size = @size / 2
 
-    if left_overlap > 0
-      @position.x = game.display.width + @size.x / 2 - left_overlap
-    elsif right_overlap > 0
-      @position.x = right_overlap - @size.x / 2
+    if (left_overlap = -@position.x - half_size.x) > 0
+      @position.x = game.display.width - left_overlap + half_size.y
+    elsif (right_overlap = @position.x - half_size.x - game.display.width) > 0
+      @position.x = right_overlap - half_size.y
     end
 
-    if top_overlap > 0
-      @position.y = game.display.height + @size.y / 2 - top_overlap
-    elsif bottom_overlap > 0
-      @position.y = bottom_overlap - @size.y / 2
+    if (top_overlap = -@position.y - half_size.y) > 0
+      @position.y = game.display.height - top_overlap + half_size.y
+    elsif (bottom_overlap = @position.y - half_size.y - game.display.height) > 0
+      @position.y = bottom_overlap - half_size.y
     end
   end
 
