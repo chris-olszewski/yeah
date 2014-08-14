@@ -37,7 +37,7 @@ class Asteroid < Thing
   end
 
   def colliding?(point)
-    distance_between(@position, point) < radius
+    @position.distance_to(point) < radius
   end
 
   def die(game)
@@ -64,10 +64,6 @@ class Asteroid < Thing
 
   def radius
     @side_count * RADIUS_PER_SIDE
-  end
-
-  def distance_between(a, b)
-    Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
   end
 
   def draw_polygon(d, position, rotation, side_count, radius)

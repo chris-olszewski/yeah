@@ -49,7 +49,7 @@ class ExampleGame < Game
       d.translate(@position)
       d.scale(V[Math.sin(@rotation) + 2, Math.sin(@rotation) + 2])
       d.rotate(@rotation)
-      d.image_cropped(V[-67.5, -40], @image, V[80, 70], V[135, 80])
+      d.image_cropped(@image, V[-67.5, -40], V[80, 70], V[135, 80])
     d.pop
     @position += @direction * SPEED * elapsed
     @rotation += ROTATE_SPEED * elapsed

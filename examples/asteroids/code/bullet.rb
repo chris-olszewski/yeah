@@ -20,8 +20,7 @@ class Bullet < Thing
   end
 
   def move(elapsed)
-    @position.x += Math.cos(@direction) * SPEED * elapsed
-    @position.y += Math.sin(@direction) * SPEED * elapsed
+    @position.move_along(@direction, SPEED * elapsed)
   end
 
   def wrap(game)

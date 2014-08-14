@@ -31,8 +31,7 @@ class Ship < Thing
 
   def move(elapsed, game)
     if @thrusting
-      @velocity.x += Math.cos(@direction) * SPEED * elapsed
-      @velocity.y += Math.sin(@direction) * SPEED * elapsed
+      @velocity.move_along(@direction, SPEED * elapsed)
     end
 
     @position += @velocity

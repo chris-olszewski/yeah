@@ -53,8 +53,8 @@ class AsteroidsGame < Game
     d.font_size = 16
     d.fill_color = C['#999999']
 
-    d.fill_text(V[800, 100], "Left/Right - Turn")
-    d.fill_text(V[800, 120], "Up - Thrust")
-    d.fill_text(V[800, 140], "z - Shoot")
+    d.fill_text("Left/Right - Turn", V[800, 100])
+    d.fill_text("Up - Thrust", V[800, 120])
+    d.fill_text("z - Shoot", V[800, 140])
   end
 end
