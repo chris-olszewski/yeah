@@ -8,13 +8,13 @@ Gem::Specification.new do |s|
   s.name = 'yeah'
   s.version = Yeah::VERSION
   s.summary = "Practical Ruby video game framework"
-  s.description = "Video game framework that takes advantage of Ruby's " +
-    "unique set of strengths as a programming language."
+  s.description = "Video game framework designed to be easy to learn and " +
+                  "fast to build games with."
 
   s.authors = ["Artur Ostrega"]
   s.email = 'skoofoo@gmail.com'
 
-  s.files = Dir.glob('{bin,lib,demo}/**/*') + %w(LICENSE.txt README.md)
+  s.files = Dir.glob('{bin,lib,opal,examples}/**/*') + %w(LICENSE.txt README.md)
   s.executables = ['yeah']
 
   s.homepage = 'https://github.com/skofo/yeah'
@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'minitest', '~> 5.3.2'
   s.add_development_dependency 'opal-minitest', '~> 0.0.3'
   s.add_development_dependency 'yard', '~> 0.8.7.2'
+  s.add_development_dependency 'kramdown', '~> 1.4.1'
 end

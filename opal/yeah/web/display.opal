@@ -1,15 +1,15 @@
 module Yeah
 module Web
 class Display
-  attr_reader :font_type, :font_size
+  attr_reader :font_family, :font_size
 
-  def initialize(args = {})
-    canvas_selector = args.fetch(:canvas_selector, DEFAULT_CANVAS_SELECTOR)
+  def initialize(options = {})
+    canvas_selector = options.fetch(:canvas_selector, DEFAULT_CANVAS_SELECTOR)
 
     @canvas = `document.querySelectorAll(#{canvas_selector})[0]`
     @context = `#@canvas.getContext('2d')`
-    self.size = args.fetch(:size, DEFAULT_DISPLAY_SIZE)
-    self.font_type = DEFAULT_DISPLAY_FONT_TYPE
+    self.size = options.fetch(:size, DEFAULT_DISPLAY_SIZE)
+    self.font_family = DEFAULT_DISPLAY_FONT_FAMILY
     self.font_size = DEFAULT_DISPLAY_FONT_SIZE
     @transform = [1, 0, 0, 1, 0, 0]
     @transforms = []
@@ -54,8 +54,22 @@ class Display
   def stroke_width
     `#@context.lineWidth`
   end
-  def stroke_width=(number)
-    `#@context.lineWidth = #{number}`
+  def stroke_width=(numeric)
+    `#@context.lineWidth = #{numeric}`
+  end
+
+  def font_family=(type)
+    @font_family= type
+
+    font = "#{@font_size}px #{@font_family}"
+    `#@context.font = #{font}`
+  end
+
+  def font_size=(size)
+    @font_size = size
+
+    font = "#{@font_size}px #{@font_family}"
+    `#@context.font = #{font}`
   end
 
   def color_at(position)
@@ -63,13 +77,15 @@ class Display
     C[`data[0]`, `data[1]`, `data[2]`]
   end
 
-  def transform
+  def transformation
     @transform + [0, 0, 1] # appendage to fulfill signature
   end
 
-  def translate(distance)
-    @transform[4] += `#{@transform[0]} * #{distance.x} + #{@transform[2]} * #{distance.y}`
-    @transform[5] += `#{@transform[1]} * #{distance.x} + #{@transform[3]} * #{distance.y}`
+  def translate(displacement)
+    @transform[4] += `#{@transform[0]} * #{displacement.x} +
+                      #{@transform[2]} * #{displacement.y}`
+    @transform[5] += `#{@transform[1]} * #{displacement.x} +
+                      #{@transform[3]} * #{displacement.y}`
 
     %x{
       #@context.setTransform(#{@transform[0]}, #{@transform[1]},
@@ -119,11 +135,11 @@ class Display
                              #{@transform[4]}, #{@transform[5]}); }
   end
 
-  def line(pos1, pos2)
+  def stroke_line(start_pos, end_pos)
     %x{
       #@context.beginPath();
-      #@context.moveTo(#{pos1.x}, #{pos1.y});
-      #@context.lineTo(#{pos2.x}, #{pos2.y});
+      #@context.moveTo(#{start_pos.x}, #{start_pos.y});
+      #@context.lineTo(#{end_pos.x}, #{end_pos.y});
       #@context.closePath();
       #@context.stroke();
     }
@@ -135,6 +151,38 @@ class Display
 
   def fill_rectangle(position, size)
     `#@context.fillRect(#{position.x}, #{position.y}, #{size.x}, #{size.y})`
+  end
+
+  def stroke_ellipse(center, radius)
+    %x{
+      #@context.beginPath();
+      #@context.save();
+      #@context.beginPath();
+      #@context.translate(#{center.x} - #{radius.x},
+                          #{center.y} - #{radius.y});
+      #@context.scale(#{radius.x}, #{radius.y});
+      #@context.arc(1, 1, 1, 0, 2 * Math.PI, false);
+      #@context.restore();
+      #@context.stroke();
+    }
+  end
+
+  def fill_ellipse(center, radius)
+    %x{
+      #@context.beginPath();
+      #@context.save();
+      #@context.beginPath();
+      #@context.translate(#{center.x} - #{radius.x},
+                          #{center.y} - #{radius.y});
+      #@context.scale(#{radius.x}, #{radius.y});
+      #@context.arc(1, 1, 1, 0, 2 * Math.PI, false);
+      #@context.restore();
+      #@context.fill();
+    }
+  end
+
+  def clear
+    `#@context.fillRect(0, 0, #{size.x}, #{size.y})`
   end
 
   def begin_shape
@@ -153,16 +201,23 @@ class Display
     `#@context.lineTo(#{position.x}, #{position.y})`
   end
 
+  def curve_to(position, control)
+    `#@context.quadraticCurveTo(#{control.x}, #{control.y},
+                                #{position.x}, #{position.y})`
+  end
+
+  def curve2_to(position, control1, control2)
+    `#@context.bezierCurveTo(#{control1.x}, #{control1.y},
+                             #{control2.x}, #{control2.y},
+                             #{position.x}, #{position.y})`
+  end
+
   def stroke_shape
     `#@context.stroke()`
   end
 
   def fill_shape
     `#@context.fill()`
-  end
-
-  def clear
-    `#@context.fillRect(0, 0, #{size.x}, #{size.y})`
   end
 
   def image(image, position)
@@ -177,26 +232,12 @@ class Display
                            #{crop_size.x}, #{crop_size.y})}
   end
 
-  def font_type=(type)
-    @font_type = type
-
-    font = "#{@font_size}px #{@font_type}"
-    `#@context.font = #{font}`
+  def fill_text(text, position)
+    `#@context.fillText(#{text}, #{position.x}, #{position.y})`
   end
 
-  def font_size=(size)
-    @font_size = size
-
-    font = "#{@font_size}px #{@font_type}"
-    `#@context.font = #{font}`
-  end
-
-  def fill_text(value, position)
-    `#@context.fillText(#{value}, #{position.x}, #{position.y})`
-  end
-
-  def stroke_text(value, position)
-    `#@context.strokeText(#{value}, #{position.x}, #{position.y})`
+  def stroke_text(text, position)
+    `#@context.strokeText(#{text}, #{position.x}, #{position.y})`
   end
 end
 end
