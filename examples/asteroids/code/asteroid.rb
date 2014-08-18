@@ -54,10 +54,10 @@ class Asteroid < Thing
     end
   end
 
-  def draw(d)
-    d.stroke_color = COLOR
+  def draw(display)
+    display.stroke_color = COLOR
 
-    draw_polygon(d, @position, @rotation, @side_count, radius)
+    draw_polygon(display, @position, @rotation, @side_count, radius)
   end
 
   private

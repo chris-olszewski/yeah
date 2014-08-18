@@ -3,6 +3,8 @@ class AsteroidsGame < Game
 
   attr_accessor :input, :things
 
+  config[:display][:size] = V[720, 720]
+
   def setup
     @things = []
     @things << Ship.new(position: display.size / 2)
@@ -26,14 +28,7 @@ class AsteroidsGame < Game
     @input[:right] = keyboard.pressing? :right
     @input[:up] = keyboard.pressing? :up
 
-    if keyboard.pressing?(:z) && !@shot
-      @input[:shoot] = true
-      @shot = true
-    else
-      @input[:shoot] = false
-    end
-
-    @shot = false unless keyboard.pressing?(:z)
+    @input[:shoot] = keyboard.pressed? :z
 
     display.fill_color = BG_COLOR
     display.clear
@@ -53,8 +48,8 @@ class AsteroidsGame < Game
     d.font_size = 16
     d.fill_color = C['#999999']
 
-    d.fill_text("Left/Right - Turn", V[800, 100])
-    d.fill_text("Up - Thrust", V[800, 120])
-    d.fill_text("z - Shoot", V[800, 140])
+    d.fill_text("Left/Right - Turn", V[500, 100])
+    d.fill_text("Up - Thrust", V[500, 120])
+    d.fill_text("z - Shoot", V[500, 140])
   end
 end
